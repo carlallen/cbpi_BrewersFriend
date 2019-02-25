@@ -15,7 +15,7 @@ def bf_api_key():
     return api_key
 
 
-@cbpi.backgroundtask(key="brewersfriend_task", interval=600)
+@cbpi.backgroundtask(key="brewersfriend_task", interval=900)
 def brewersfriend_background_task(api):
   api_key = bf_api_key()
   if api_key == "":
