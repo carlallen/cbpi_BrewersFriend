@@ -31,7 +31,7 @@ def brewersfriend_background_task(api):
         data = {"name": name, "temp": temp, "temp_unit": unit}
         response = requests.post(bf_uri + api_key, json=data)
         if response.status_code != 200:
-          cbpi.notify("Brewer's Friend Error", "Received unsuccessful response from Brewer's Friend on submission. Ensure your API key is correct.", type="danger", timeout=None)
+          cbpi.notify("Brewer's Friend Error", "Received unsuccessful response. Ensure API key is correct. HTTP Error Code: " + str(response.status_code), type="danger", timeout=None)
       except:
         cbpi.notify("Brewer's Friend Error", "Unable to send message.", type="danger", timeout=None)
         pass
