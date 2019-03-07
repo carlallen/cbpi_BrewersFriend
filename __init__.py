@@ -6,16 +6,20 @@ bf_uri = "https://log.brewersfriend.com/stream/"
 def bf_api_key():
   api_key = cbpi.get_config_parameter('brewersfriend_api_key', None)
   if api_key is None:
-    cbpi.add_config_parameter("brewersfriend_api_key", "", "text", "BrewersFriend API Key")
-    return ""
+    try:
+      cbpi.add_config_parameter("brewersfriend_api_key", "", "text", "BrewersFriend API Key")
+      return ""
+    except:
+      cbpi.notify("Brewer's Friend Error", "Unable to update brewersfriend_api_key parameter within database. Try updating CraftBeerPi and reboot.", type="danger", timeout=None)
   else:
     return api_key
 
 
-@cbpi.backgroundtask(key="brewersfriend_task", interval=600)
+@cbpi.backgroundtask(key="brewersfriend_task", interval=900)
 def brewersfriend_background_task(api):
   api_key = bf_api_key()
   if api_key == "":
+    cbpi.notify("Brewer's Friend Error", "API key not set. Update brewersfriend_api_key parameter within System > Parameters.", type="danger", timeout=None)
     return
 
   for i, fermenter in cbpi.cache.get("fermenter").iteritems():
@@ -26,5 +30,8 @@ def brewersfriend_background_task(api):
         unit = cbpi.get_config_parameter("unit", "C")
         data = {"name": name, "temp": temp, "temp_unit": unit}
         response = requests.post(bf_uri + api_key, json=data)
+        if response.status_code != 200:
+          cbpi.notify("Brewer's Friend Error", "Received unsuccessful response. Ensure API key is correct. HTTP Error Code: " + str(response.status_code), type="danger", timeout=None)
       except:
+        cbpi.notify("Brewer's Friend Error", "Unable to send message.", type="danger", timeout=None)
         pass

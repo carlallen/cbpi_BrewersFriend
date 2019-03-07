@@ -11,6 +11,6 @@ Set the api key from https://www.brewersfriend.com/homebrew/profile/account#inte
 
 ## Updates
 
-Temperatures will update every 10 minutes to Brewer's Friend for all fermenters that are set to automatic
+Temperatures will update every 15 minutes to Brewer's Friend for all fermenters that are set to automatic
 
 You can view the logs and attach to a brew session under the Fermentation tab in your brew session within Brewer's Friend
